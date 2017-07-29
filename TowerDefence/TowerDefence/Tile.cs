@@ -5,7 +5,8 @@ using System.Text;
 
 namespace TowerDefence
 {
-    class Tile
+    public class Tile
     {
+        Building building;
     }
 }
