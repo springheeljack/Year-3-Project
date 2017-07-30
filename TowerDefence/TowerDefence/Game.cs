@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace TowerDefence
 {
@@ -8,26 +9,38 @@ namespace TowerDefence
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        public const int iTILE_SIZE = 32;
+        public static readonly Point pTILE_SIZE = new Point(iTILE_SIZE);
+        public const int iMAP_WIDTH = 40;
+        public const int iMAP_HEIGHT = 20;
+        Tile[,] tiles = new Tile[iMAP_WIDTH, iMAP_HEIGHT];
+
+        Texture2D texTileGrass;
+        Texture2D texTileRock;
 
         public Game()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            IsMouseVisible = true;
+            graphics.PreferredBackBufferHeight = 720;
+            graphics.PreferredBackBufferWidth = 1280;
         }
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            texTileGrass = Content.Load<Texture2D>("Tile/Grass");
+            texTileRock = Content.Load<Texture2D>("Tile/Rock");
+
+            LoadMap("test.tdmap");
         }
 
         protected override void UnloadContent()
@@ -46,9 +59,37 @@ namespace TowerDefence
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+
+            for (int x = 0; x < iMAP_WIDTH; x++)
+                for (int y = 0; y < iMAP_HEIGHT; y++)
+                    tiles[x, y].Draw(spriteBatch, new Point(x * iTILE_SIZE, y * iTILE_SIZE));
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        void LoadMap(string path)
+        {
+            string fileText = System.IO.File.ReadAllText("Map/"+path);
+            string cleanedFileText = "";
+            foreach (char c in fileText)
+                if (!char.IsControl(c))
+                    cleanedFileText += c;
+            fileText = cleanedFileText;
+
+            int count = 0;
+            Texture2D texture;
+            foreach (char c in fileText)
+            {
+                if (c == '0')
+                    texture = texTileGrass;
+                else
+                    texture = texTileRock;
+                tiles[count % iMAP_WIDTH, count / iMAP_WIDTH] = new Tile(texture);
+                count++;
+            }
         }
     }
 }
