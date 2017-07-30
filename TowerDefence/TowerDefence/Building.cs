@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,11 @@ namespace TowerDefence
     {
         int health;
         int maxHealth;
-        int X;
-        int Y;
-        public abstract void Draw(SpriteBatch spriteBatch);
+        Point position;
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(texture, new Rectangle(position, texture.Bounds.Size), Color.White);
+        }
         public abstract void Update();
         Texture2D texture;
     }
