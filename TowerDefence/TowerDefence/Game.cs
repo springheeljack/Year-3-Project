@@ -72,7 +72,7 @@ namespace TowerDefence
 
         void LoadMap(string path)
         {
-            string fileText = System.IO.File.ReadAllText(path);
+            string fileText = System.IO.File.ReadAllText("Map/"+path);
             string cleanedFileText = "";
             foreach (char c in fileText)
                 if (!char.IsControl(c))
