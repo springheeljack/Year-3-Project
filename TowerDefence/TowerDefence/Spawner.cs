@@ -7,7 +7,7 @@ namespace TowerDefence
 {
     public class Spawner : Building
     {
-        public static float spawnTime = 2.5f;
+        public static float spawnTime = 0.5f;
 
         public bool ReadyToSpawn
         {
@@ -15,7 +15,7 @@ namespace TowerDefence
         }
         float timer;
 
-        public Spawner()
+        public Spawner(Tile t) : base(t)
         {
             Texture = Game.texSpawner;
             ResetTimer();

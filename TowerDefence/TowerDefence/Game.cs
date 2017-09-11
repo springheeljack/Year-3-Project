@@ -23,7 +23,7 @@ namespace TowerDefence
         List<Building> allBuildings = new List<Building>();
         List<Tower> allTowers = new List<Tower>();
         public static List<Spawner> allSpawners = new List<Spawner>();
-        Castle castle;
+        public static Castle castle;
         static CreepManager creepManager = new CreepManager();
 
 
@@ -62,17 +62,20 @@ namespace TowerDefence
 
             LoadMap("test.tdmap");
 
-            CreateBuilding(new Tower(), 3, 3);
-            CreateBuilding(new Tower(), 2, 3);
-            CreateBuilding(new Tower(), 1, 3);
+            CreateBuilding(new Tower(tiles[3, 3]));
+            CreateBuilding(new Tower(tiles[2, 3]));
+            CreateBuilding(new Tower(tiles[1, 3]));
 
-            CreateBuilding(new Castle(), 5, 5);
+            for (int i = 3; i < 17; i++)
+                CreateBuilding(new Tower(tiles[i, 6]));
 
-            CreateBuilding(new Spawner(), 15, 15);
-            CreateBuilding(new Spawner(), 15, 14);
-            CreateBuilding(new Spawner(), 15, 13);
-            CreateBuilding(new Spawner(), 6, 5);
-            CreateBuilding(new Spawner(), 4, 3);
+            CreateBuilding(new Castle(tiles[5, 5]));
+
+            CreateBuilding(new Spawner(tiles[15, 15]));
+            //CreateBuilding(new Spawner(tiles[15, 14]));
+            //CreateBuilding(new Spawner(tiles[15, 13]));
+            //CreateBuilding(new Spawner(tiles[6, 5]));
+            //CreateBuilding(new Spawner(tiles[4, 3]));
         }
 
         protected override void UnloadContent()
@@ -119,20 +122,27 @@ namespace TowerDefence
 
             int count = 0;
             Texture2D texture;
+            Terrain terrain;
             foreach (char c in fileText)
             {
                 if (c == '0')
+                {
                     texture = texTileGrass;
+                    terrain = Terrain.Grass;
+                }
                 else
+                {
                     texture = texTileRock;
-                tiles[count % iMAP_WIDTH, count / iMAP_WIDTH] = new Tile(texture);
+                    terrain = Terrain.Rock;
+                }
+                tiles[count % iMAP_WIDTH, count / iMAP_WIDTH] = new Tile(texture, count % iMAP_WIDTH, count / iMAP_WIDTH, terrain);
                 count++;
             }
         }
-        void CreateBuilding(Building building, int TileX, int TileY)
+        void CreateBuilding(Building building)
         {
-            building.position = new Point(TileX * iTILE_SIZE + iTILE_SIZE_HALF, TileY * iTILE_SIZE + iTILE_SIZE_HALF);
-            tiles[TileX, TileY].Building = building;
+            building.position = new Point(building.Tile.X * iTILE_SIZE + iTILE_SIZE_HALF, building.Tile.Y * iTILE_SIZE + iTILE_SIZE_HALF);
+            tiles[building.Tile.X, building.Tile.Y].Building = building;
             allBuildings.Add(building);
             if (building is Tower)
                 allTowers.Add(building as Tower);

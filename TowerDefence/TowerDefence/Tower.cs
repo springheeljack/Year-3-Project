@@ -11,7 +11,7 @@ namespace TowerDefence
     {
         public float rotation = 0.0f;
         public Texture2D barrelTexture;
-        public Tower()
+        public Tower(Tile t) : base(t)
         {
             Texture = Game.texTower;
             barrelTexture = Game.texTowerBarrel;

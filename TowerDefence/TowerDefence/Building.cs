@@ -19,5 +19,10 @@ namespace TowerDefence
         }
         public abstract void Update();
         public Texture2D Texture;
+        public Tile Tile;
+        public Building(Tile t)
+        {
+            Tile = t;
+        }
     }
 }

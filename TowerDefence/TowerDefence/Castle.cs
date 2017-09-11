@@ -8,7 +8,7 @@ namespace TowerDefence
 {
     public class Castle : Building
     {
-        public Castle()
+        public Castle(Tile t) : base(t)
         {
             Texture = Game.texCastle;
         }
